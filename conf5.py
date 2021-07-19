@@ -82,9 +82,9 @@ def get_page_data(html):
 
 
 def save_csv(items, path):
-    with open(path, 'a',encoding ='utf-8') as file:
+    with open(path, 'a', newline='') as file:
         writer = csv.writer(file, delimiter= ';')
-        # writer.writerow(['Название', 'Место', 'Дата проведения', 'Дедлайн', 'Область науки', 'Почта', 'Организатор'])
+        # writer.writerow(['Название', 'Место', 'Дата проведения', 'Дедлайн', 'Почта', 'Организатор', 'Ссылка'])
         writer.writerow([items['title'],
                          items['geo2'],
                          items['date2'],
@@ -95,11 +95,11 @@ def save_csv(items, path):
                          ])
 
 def main():
-    # start = datetime.now()
+    # 99 страниц
     url ='https://konferen.ru/?Event%5Btitle%5D=&Event%5Brf_country%5D=&Event%5Brf_city%5D=&Event%5Bdate_b%5D=18.07.2021&Event%5Bdate_e%5D=&Event%5Bis_getin%5D=1&yt1='
     PAGENATION = input('Укажите количество страниц для парсинга:')
     PAGENATION = int(PAGENATION.strip())
-    for page in range(1, PAGENATION):
+    for page in range(83, PAGENATION):
         print(f'Парсим страницу: {page})')
         all_links=get_all_links(get_html(url, params={'events': page}))
         for index, link in enumerate(all_links):

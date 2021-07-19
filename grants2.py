@@ -27,9 +27,9 @@ def get_content (html):
         grants.append(
             {
                 'title': item.find( 'h1', class_='entry-title').get_text(),
-                'deadline': item.find( 'div', class_='entry-summary').find('p').get_text().split('Каждый')[0],
-                'link':  item.find( 'h1', class_='entry-title').find('a').get('href')
-                # 'info': item.find( 'div', class_='wt-card-item').find('p').get_text(),
+                'deadline': item.find( 'div', class_='entry-summary').find('p').get_text().split('Каждый')[0].split('Дедлайн:')[1],
+                'link':  item.find( 'h1', class_='entry-title').find('a').get('href'),
+                # 'info': item.find('div', class_='entry-summary').find('br').get_text().split,
                 # 'date': item.find('div', class_='wt-card-item').find('span').get_text(),
 
                 # find('table', class_='table-dl').find('td').get_text()
@@ -38,11 +38,11 @@ def get_content (html):
     return grants
 
 def save_csv(items, path):
-    with open(path, 'w', newline='', encoding ='utf-8') as file:
+    with open(path, 'a', newline='') as file:
         writer = csv.writer(file, delimiter= ';')
-        writer.writerow(['Название гранта', 'Ссылка'])
+        # writer.writerow(['Название гранта', 'Дедлайн', 'Ссылка'])
         for item in items:
-            writer.writerow([item['title'],item['link']])
+            writer.writerow([item['title'],item['deadline'],item['link']])
 
 
 def parser():
@@ -51,7 +51,7 @@ def parser():
     html = get_html(URL)
     if html.status_code == 200:
         grants = []
-        for page in range (1,PAGENATION):
+        for page in range (32,PAGENATION):
             print(f'Парсим страницу: {page})')
             html = get_html(URL, params={'paged': page})
             grants.extend(get_content(html.text))

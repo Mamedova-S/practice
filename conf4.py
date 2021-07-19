@@ -33,8 +33,9 @@ def get_page_data(html):
 
     try:
         title = soup.find('section', id='main').find('h1', class_='title').text
+        title2 = re.sub("^\s+|\n|\r|\s+$", '', title)
     except Exception:
-        title = ''
+        title2 = ''
     # print(title)
     try:
         geo = soup.find('section', id='main').find('div', class_='location').find('p').text.split(':')[1]
@@ -68,22 +69,23 @@ def get_page_data(html):
         sponsor2 = re.sub("^\s+|\n|\r|\s+$", '', sponsor)
     except Exception:
         sponsor2 = ''
+    print(sponsor)
 
     try:
         link=info_[11].find('a').get('href')
-    except:
+    except Exception:
         link = 'none'
 
     print(link)
 
     data = {
-            'title': title,
+            'title2': title2,
             'geo2': geo2,
             'date2': date2,
-            'deadline': deadline2,
-            'field': field2,
-            'email': email2,
-            'sponsor': sponsor2,
+            'deadline2': deadline2,
+            'field2': field2,
+            'email2': email2,
+            'sponsor2': sponsor2,
             'link': link,
     }
 
@@ -92,25 +94,25 @@ def get_page_data(html):
 
 
 def save_csv(items, path):
-    with open(path, 'a',encoding ='utf-8') as file:
+    with open(path, 'a', newline='') as file:
         writer = csv.writer(file, delimiter= ';')
         # writer.writerow(['Название', 'Место', 'Дата проведения', 'Дедлайн', 'Область науки', 'Почта', 'Организатор'])
-        writer.writerow([items['title'],
+        writer.writerow([items['title2'],
                          items['geo2'],
                          items['date2'],
-                         items['deadline'],
-                         items['field'],
-                         items['email'],
-                         items['sponsor'],
+                         items['deadline2'],
+                         items['field2'],
+                         items['email2'],
+                         items['sponsor2'],
                          items['link']
                          ])
 
 def main():
-    # start = datetime.now()
+    # 46 страниц
     url ='https://www.science-community.org/ru/conferences'
     PAGENATION = input('Укажите количество страниц для парсинга:')
     PAGENATION = int(PAGENATION.strip())
-    for page in range(1, PAGENATION):
+    for page in range(42, PAGENATION):
         print(f'Парсим страницу: {page})')
         all_links=get_all_links(get_html(url, params={'page': page}))
         for index, link in enumerate(all_links):

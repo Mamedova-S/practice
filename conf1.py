@@ -22,7 +22,7 @@ def get_all_links(html):
     for index, ad in enumerate(ads):
         link = 'https://konferencii.ru' + ad.find('div', class_='index_cat_tit').find('a').get('href')
         all_links.append(link)
-        print(index, link)
+
 
     return all_links
 
@@ -49,12 +49,12 @@ def get_page_data(html):
     except:
         form2 = 'none'
     try:
-        date = soup.find('div', class_='content').find('div', id='main_top').text.split('Добавить еще «Золотую ленточку»')[1].split(', срок заявок:')[0]
+        date = soup.find('div', class_='content').find('div', id='main_top').find('p').text.split(', срок заявок:')[0]
         date2=re.sub("^\s+|\n|\r|\s+$", '', date)
     except:
         date2 = 'none'
     try:
-        deadline = soup.find('div', class_='content').find('div', id='main_top').text.split('Добавить еще «Золотую ленточку»')[1]
+        deadline = soup.find('div', class_='content').find('div', id='main_top').find('p').text
         deadline2=re.sub("^\s+|\n|\r|\s+$", '', deadline.split('срок заявок:')[1])
     except:
         deadline2 = 'none'
@@ -77,9 +77,9 @@ def get_page_data(html):
 
 
 def save_csv(items, path):
-    with open(path, 'a') as file:
+    with open(path, 'a', newline='') as file:
         writer = csv.writer(file, delimiter= ';')
-        # writer.writerow(['Название гранта', 'Ссылка', 'Описание', 'Дедлайн'])
+        # writer.writerow(['Название', 'Место', 'Форма участия', 'Дата', 'Дедлайн', 'Организатор', 'Почта', 'Ссылка'])
         writer.writerow((items['title'],
                          items['geo2'],
                          items['form2'],
@@ -92,26 +92,15 @@ def save_csv(items, path):
 
 
 def main():
-    # start = datetime.now()
-    for url in [
 
-        'https://konferencii.ru/year/2021/1',
-        'https://konferencii.ru/year/2021/2',
-        'https://konferencii.ru/year/2021/3',
-        'https://konferencii.ru/year/2021/4',
-        'https://konferencii.ru/year/2021/5',
-        'https://konferencii.ru/year/2021/6',
-        'https://konferencii.ru/year/2021/7',
-        'https://konferencii.ru/year/2021/8',
-        'https://konferencii.ru/year/2021/9',
+    # 29 страниц
 
-    ]:
-        all_links = get_all_links(get_html(url))
-        for index, link in enumerate(all_links):
-            html = get_html(link)
-            datas = get_page_data(html)
-        pass
-    pass
+    url = 'https://konferencii.ru/year/2021/29'
+    all_links = get_all_links(get_html(url))
+
+    for index, link in enumerate(all_links):
+        html = get_html(link)
+        data = get_page_data(html)
 
 if __name__ == '__main__':
     main()
