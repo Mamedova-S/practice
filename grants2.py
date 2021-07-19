@@ -29,10 +29,7 @@ def get_content (html):
                 'title': item.find( 'h1', class_='entry-title').get_text(),
                 'deadline': item.find( 'div', class_='entry-summary').find('p').get_text().split('Каждый')[0].split('Дедлайн:')[1],
                 'link':  item.find( 'h1', class_='entry-title').find('a').get('href'),
-                # 'info': item.find('div', class_='entry-summary').find('br').get_text().split,
-                # 'date': item.find('div', class_='wt-card-item').find('span').get_text(),
 
-                # find('table', class_='table-dl').find('td').get_text()
             }
         )
     return grants

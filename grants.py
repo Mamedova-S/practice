@@ -32,7 +32,6 @@ def get_content (html):
                 'info': item.find( 'div', class_='wt-card-item').find('p').get_text(),
                 'date': item.find('div', class_='wt-card-item').find('span').get_text(),
 
-                # find('table', class_='table-dl').find('td').get_text()
             }
         )
     return grants
